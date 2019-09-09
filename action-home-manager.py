@@ -5,6 +5,7 @@ from snipsTools import SnipsConfigParser
 from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 from snips_home_manager import SnipsHomeManager
+from enum import Enum
 import io
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
@@ -29,6 +30,48 @@ INTENT_ARRIVE_HOME = "arriveHome"
 INTENT_LEAVE_HOME = "leaveHome"
 INTENT_GIVE_ANSWER = "giveAnswer"
 
+# # States
+# class HomeContexts(Enum):
+#     CONTEXT_COMMANDS = 1
+#     CONTEXT_CONVERSATION = 2
+#
+# # Transitions
+# class Events(Enum):
+#     EVENT_SPEAK_COMMAND = 1
+#     EVENT_ARRIVE_HOME = 2
+#     EVENT_LEAVE_HOME = 3
+#     EVENT_ANSWER_QUESTION = 4
+#     EVENT_END_CONVERSATION = 5
+#
+#
+# current_context = HomeContexts.CONTEXT_COMMANDS
+# current_event = None
+#
+# def intent_received(hermes, intent_message):
+#
+#     global current_context
+#     intent_name = intent_message.intent.intent_name
+#
+#     if current_context == HomeContexts.CONTEXT_COMMAND_MODE:
+#         if intent_name == INTENT_ARRIVE_HOME:
+#             switch_to_conversation()
+#         elif intent_name == INTENT_LEAVE_HOME:
+#             switch_to_conversation()
+#         elif intent_name == INTENT_LIGHT_ON:
+#             # perform command
+#         elif intent_name == INTENT_LIGHT_OFF:
+#             # perform command
+#
+#     elif current_context == HomeContexts.CONTEXT_ARRIVE_HOME:
+#         print("USER ARRIVES HOME")
+#     elif current_context
+#
+#
+# def switch_to_conversation():
+#     current_context = HomeContexts.CONTEXT_COMMANDS
+#
+#
+#
 
 class HomeManager(object):
     """
@@ -81,7 +124,7 @@ class HomeManager(object):
         else:
             self.steward.light_off_all()
             sentence = "Turning off all the lights"
-        self.terminate_feedback(hermes, intent_message, sentence, "")
+        self.terminate_feedback(hermes, intent_message, sentence, "", "")
 
     def set_light_color(self, hermes, intent_message, rooms, convo):
         color = self.extract_color(intent_message)
@@ -129,7 +172,7 @@ class HomeManager(object):
         else:
             #self.steward.shift_light_up_all(percent)
             sentence = "Can only shift a specific light "
-        self.terminate_feedback(hermes, intent_message, sentence, "")
+        self.terminate_feedback(hermes, intent_message, sentence, "", "")
 
     def shift_lights_down(self, hermes, intent_message, rooms):
         percent = self.extract_percentage(intent_message, 20)
@@ -141,7 +184,7 @@ class HomeManager(object):
         else:
             #self.steward.shift_light_down_all(percent)
             sentence = "Can only shift a specific light"
-        self.terminate_feedback(hermes, intent_message, sentence, "")
+        self.terminate_feedback(hermes, intent_message, sentence, "", "")
 
     def set_a_scene(self, hermes, intent_message, rooms):
         if len(rooms) > 0:
@@ -150,7 +193,7 @@ class HomeManager(object):
                 sentence += " " + room
         else:
             sentence = "Setting a scene "
-        self.terminate_feedback(hermes, intent_message, sentence, "")
+        self.terminate_feedback(hermes, intent_message, sentence, "", "")
 
     def turn_tv_on(self, hermes, intent_message, convo):
         self.steward.tv_on()
@@ -163,7 +206,7 @@ class HomeManager(object):
     def turn_tv_off(self, hermes, intent_message):
         self.steward.tv_off()
         sentence = "tee vee off"
-        self.terminate_feedback(hermes, intent_message, sentence, "")
+        self.terminate_feedback(hermes, intent_message, sentence, "", "")
 
     def extract_house_rooms(self, intent_message):
         house_rooms = []
@@ -218,13 +261,13 @@ class HomeManager(object):
                     self.context = None
 
         if intent_name == INTENT_LIGHT_ON:
-            self.turn_light_on(hermes, intent_message, rooms)
+            self.turn_light_on(hermes, intent_message, rooms, "")
         elif intent_name == INTENT_LIGHT_OFF:
             self.turn_light_off(hermes, intent_message, rooms)
         elif intent_name == INTENT_LIGHT_COLOR:
-            self.set_light_color(hermes, intent_message, rooms)
+            self.set_light_color(hermes, intent_message, rooms, "")
         elif intent_name == INTENT_LIGHT_BRIGHTNESS:
-            self.set_light_brightness(hermes, intent_message, rooms)
+            self.set_light_brightness(hermes, intent_message, rooms, "")
         elif intent_name == INTENT_LIGHTS_UP:
             self.shift_lights_up(hermes, intent_message, rooms)
         elif intent_name == INTENT_LIGHTS_DOWN:
@@ -232,9 +275,9 @@ class HomeManager(object):
         elif intent_name == INTENT_SET_SCENE:
             self.set_a_scene(hermes, intent_message, rooms)
         elif intent_name == INTENT_TV_ON:
-            self.turn_tv_on(hermes, intent_message)
+            self.turn_tv_on(hermes, intent_message, "")
         elif intent_name == INTENT_TV_OFF:
-            self.turn_tv_off(hermes, intent_message)
+            self.turn_tv_off(hermes, intent_message,)
         elif intent_name == INTENT_ARRIVE_HOME:
             self.arrive_home(hermes, intent_message)
 
@@ -253,7 +296,7 @@ class HomeManager(object):
             hermes.publish_continue_session(intent_message.session_id, sentence, [intent_filt])
         else:
             hermes.publish_end_session(intent_message.session_id, sentence)
-        
+
 
 if __name__ == "__main__":
     HomeManager()
