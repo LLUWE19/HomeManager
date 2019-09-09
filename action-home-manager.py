@@ -287,6 +287,7 @@ class HomeManager(object):
 
     def arrive_home(self, hermes, intent_message):
         sentence = "Welcome Home, do you want the lights on?"
+        self.last_question = sentence
         self.context = "ArriveHome"
         self.terminate_feedback(hermes, intent_message, sentence, "continue", "LLUWE19:" + INTENT_GIVE_ANSWER)
 
