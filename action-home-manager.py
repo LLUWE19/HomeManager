@@ -244,11 +244,11 @@ class HomeManager(object):
         print("[DEBUG] " + intent_name)
         if ':' in intent_name:
             intent_name = intent_name.split(":")[1]
-            print("[DEBUG] " + intent_name)
+            print("[DEBUG] intent_name: " + intent_name)
         if self.context == "ArriveHome":
-            print("[DEBUG] Context:" + self.context)
+            print("[DEBUG] Context: " + self.context)
             if self.last_question == "Welcome Home, do you want the lights on?":
-                print("[DEBUG] last_question:" + self.last_question)
+                print("[DEBUG] last_question: " + self.last_question)
                 if intent_name == INTENT_GIVE_ANSWER:
                     print("[DEBUG] intent_name:" + intent_name)
                     if intent_message.slots.percent.first().value == "true":
