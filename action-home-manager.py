@@ -251,7 +251,7 @@ class HomeManager(object):
                 print("[DEBUG] last_question: " + self.last_question)
                 if intent_name == INTENT_GIVE_ANSWER:
                     print("[DEBUG] intent_name:" + intent_name)
-                    if intent_message.slots.percent.first().value == "true":
+                    if intent_message.slots.answer.first().value == "true":
                         print("[DEBUG] turn_light_on()")
                         self.turn_light_on(hermes, intent_message, rooms, "continue")
             if intent_name == INTENT_LIGHT_BRIGHTNESS:
