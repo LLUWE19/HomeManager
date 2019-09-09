@@ -284,7 +284,7 @@ class HomeManager(object):
     def arrive_home(self, hermes, intent_message):
         sentence = "Welcome Home, do you want the lights on?"
         self.context = "ArriveHome"
-        self.terminate_feedback(hermes, intent_message, sentence, "continue", INTENT_GIVE_ANSWER)
+        self.terminate_feedback(hermes, intent_message, sentence, "continue", "LLUWE19:" + INTENT_GIVE_ANSWER)
 
     def start_blocking(self):
         with Hermes(MQTT_ADDR) as h:
