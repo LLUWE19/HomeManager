@@ -251,17 +251,31 @@ class HomeManager(object):
                 print("[DEBUG] last_question: " + self.last_question)
                 if intent_name == INTENT_GIVE_ANSWER:
                     print("[DEBUG] intent_name:" + intent_name)
-                    if intent_message.slots.answer.first().value == "true":
+                    if intent_message.slots.answer.first().value == "yes":
                         print("[DEBUG] turn_light_on()")
+                        sentence = "okay. how bright do you want the lights"
+                        self.last_question = sentence
+                        self.context = "ArriveHome"
                         self.turn_light_on(hermes, intent_message, rooms, "continue")
-            if intent_name == INTENT_LIGHT_BRIGHTNESS:
-                self.set_light_brightness(hermes, intent_message, rooms, "continue")
-            if intent_name == INTENT_LIGHT_COLOR:
-                self.set_light_color(hermes, intent_message, rooms, "continue")
-            if intent_name == INTENT_GIVE_ANSWER:
-                if self.last_question == "would you like the TV on":
+                        self.terminate_feedback(hermes, intent_message, sentence, "continue", INTENT_GIVE_ANSWER)
+            if self.last_question == "okay. how bright do you want the lights":
+                if intent_name == INTENT_LIGHT_BRIGHTNESS:
+                    sentence = "okay. what color do you want the light"
+                    self.last_question = sentence
+                    self.context = "ArriveHome"
+                    self.set_light_brightness(hermes, intent_message, rooms, "continue")
+                    self.terminate_feedback(hermes, intent_message, sentence, "continue", INTENT_GIVE_ANSWER)
+            if self.last_question == "okay. what color do you want the light":
+                if intent_name == INTENT_LIGHT_COLOR:
+                    sentence = "okay. did you want the TV on"
+                    self.last_question = sentence
+                    self.context = "ArriveHome"
+                    self.set_light_color(hermes, intent_message, rooms, "continue")
+                    self.terminate_feedback(hermes, intent_message, sentence, "continue", INTENT_GIVE_ANSWER)
+            if self.last_question == "okay. did you want the TV on":
+                if intent_name == INTENT_GIVE_ANSWER:
                     if intent_message.slots.percent.first().value == "yes":
-                        self.turn_tv_on(hermes, intent_message)
+                        self.turn_tv_on(hermes, intent_message, "")
                     self.context = None
 
         if intent_name == INTENT_LIGHT_ON:
