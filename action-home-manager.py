@@ -28,19 +28,6 @@ INTENT_TV_OFF = "putTvOff"
 INTENT_ARRIVE_HOME = "arriveHome"
 INTENT_LEAVE_HOME = "leaveHome"
 INTENT_GIVE_ANSWER = "giveAnswer"
-INTENT_GIVE_PERCENTAGE = "givePercentage"
-INTENT_GIVE_COLOR = "giveColor"
-
-FILTER_ARRIVE_HOME = [INTENT_GIVE_ANSWER, INTENT_GIVE_PERCENTAGE, INTENT_GIVE_COLOR]
-
-# contexts = ["arrive_home", "at_home", "leaving_home", "out_home"]
-
-contexts = {
-    "arrive_home": False,
-    "at_home": False,
-    "leaving_home": False,
-    "out_home": False
-}
 
 
 class HomeManager(object):
@@ -163,13 +150,6 @@ class HomeManager(object):
         sentence = "tee vee off"
         self.terminate_feedback(hermes, intent_message, sentence)
 
-    def arrive_home(self, hermes, intent_message):
-        print("User has arrived home")
-        sentence = "welcome home do you want the lights on"
-        global CONTEXT_ARRIVE_HOME
-        CONTEXT_ARRIVE_HOME = True
-        self.terminate_feedback(hermes, intent_message, sentence)
-
     def master_intent_callback(self,hermes, intent_message):
         rooms = self.extract_house_rooms(intent_message)
         intent_name = intent_message.intent.intent_name
@@ -195,8 +175,6 @@ class HomeManager(object):
             self.turn_tv_on(hermes, intent_message)
         if intent_name == INTENT_TV_OFF:
             self.turn_tv_off(hermes, intent_message)
-        if intent_name == INTENT_ARRIVE_HOME:
-            self.arrive_home(hermes, intent_message)
 
     def extract_house_rooms(self, intent_message):
         house_rooms = []
